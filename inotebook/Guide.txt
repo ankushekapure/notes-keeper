@@ -1,0 +1,97 @@
+1. Create React App
+2. Install React router dom concurrently - if we want to run more than one server then we can do this by installing concurrently.
+3. start both frontend and backend servers - before that go to package.json of react app
+add "both": "concurrently \"npm run start\" \"nodemon ../backend/index.js\""
+Note- Here npm run start is for running react app on server and nodemon is for backend server write it below eject line code
+4. Now run npm run both
+
+Creating Context
+1. Create context folder in src
+2. create context folders inside context folder like notes, users eject
+3. now create state file and Context files inside those folders
+4. import createContext from react in notecontext.js file
+5. // Creating Context
+const noteContext = createContext();
+6. Now create state in noteState.js file and import react as well as noteContext.js 
+import NoteContext from "./noteContext";
+
+const NoteState = (props) => {
+    const state = {
+        "name": "Ankush",
+        "class": "4A"
+    }
+    return (
+        <NoteContext.Provider value={state}>
+            {props.children}
+        </NoteContext.Provider>
+    )
+}
+
+export default NoteState;
+9. Now go to app.js and wrap all the components as well as router inside <NoteState></noteState>
+
+10. Now go to components where you want to use noteContext and import useContext hook
+import { useState } from "react";
+import NoteContext from "./noteContext";
+
+const NoteState = (props) => {
+    const s1 = {
+        "name": "Ankush",
+        "class": "4A"
+    }
+
+    const [state, setState] = useState(s1);
+
+    const update = ()=>{
+        setTimeout(()=>{
+            setState({"name": "Suyog", "class": "5A"});
+        }, 2000)
+    }
+
+    return (
+        <NoteContext.Provider value={{state, update}}>
+            {props.children}
+        </NoteContext.Provider>
+    )
+}
+
+export default NoteState;
+
+11. After this we will use useEffect hook to change state after initial loading of name and class in About.js component
+import React, {useContext, useEffect} from 'react'
+import noteContext from '../context/notes/noteContext'
+
+export default function About() {
+  const a = useContext(noteContext);
+
+  useEffect(() => {
+    // using function from noteContezt
+    a.update();
+  }, [])
+  
+  return (
+    <div className='container'>
+      This is About {a.state.name} and he is in class {a.state.class}
+    </div>
+  )
+}
+
+
+12. use location hook - it return us a object with path, state and key, hash, search
+13. // import PropTypes from 'prop-types'
+import React, {useEffect} from 'react'
+import { Link, useLocation } from 'react-router-dom'
+
+
+const Navbar = () => {
+    
+    // 
+    let location = useLocation();
+    
+    useEffect(()=>{
+        console.log(location);
+    }, [location]);
+
+    return ( )}
+
+    14. for adding notes we need package cors so install it npm i cors in backend folder
